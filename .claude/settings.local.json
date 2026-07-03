@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(venv/Scripts/pip list *)",
+      "Bash(venv/Scripts/python -m pip install -r requirements.txt)",
+      "Bash(mysql -u root -e \"SELECT id, username, display_name FROM aksara_db.users WHERE username LIKE '%Iqbal%';\")",
+      "Bash(mysql -u root -e \"SELECT COUNT\\(*\\) AS daily_stats FROM aksara_db.daily_stats WHERE user_id=3; SELECT COUNT\\(*\\) AS learning_sessions FROM aksara_db.learning_sessions WHERE user_id=3; SELECT COUNT\\(*\\) AS quiz_results FROM aksara_db.quiz_results WHERE user_id=3;\")",
+      "Bash(mysql -u root -e \"DELETE FROM aksara_db.daily_stats WHERE user_id=3; DELETE FROM aksara_db.learning_sessions WHERE user_id=3; DELETE FROM aksara_db.quiz_results WHERE user_id=3;\")",
+      "Bash(curl -s -X POST http://localhost:8000/api/auth/login -H \"Content-Type: application/json\" -d '{\"username\":\"Iqbal\",\"password\":\"aksara123\"}')",
+      "Bash(mysql -u root -e \"SELECT id, username, password_hash FROM aksara_db.users WHERE username='Iqbal';\")",
+      "Bash(python -c ' *)",
+      "Bash(venvScriptspython -c ' *)",
+      "PowerShell(cd \"C:\\\\Users\\\\Acer\\\\Documents\\\\Project\\\\achiving\\\\be\"; $env:Path += \";C:\\\\Users\\\\Acer\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.11-windows-x86_64-none\"; .\\\\venv\\\\Scripts\\\\python -c \"from passlib.context import CryptContext; pwd = CryptContext\\(schemes=['bcrypt'], deprecated='auto'\\); print\\(pwd.hash\\('aksara123'\\)\\)\")",
+      "Bash(mysql -u root -e 'UPDATE aksara_db.users SET password_hash='\\\\''$2b$12$ts.vRm2qrLZbENewlvYmWut6LKVWuY7zbpqH2sJXRxpub7yUQACk2'\\\\'' WHERE id=3; SELECT id, username, password_hash FROM aksara_db.users WHERE id=3;')",
+      "Bash(mysql -u root -e \"SELECT id,username,level,current_xp,streak_days,total_minutes_studied,daily_goal_minutes FROM aksara_db.users WHERE id=3; SELECT COUNT\\(*\\) AS daily_stats FROM aksara_db.daily_stats WHERE user_id=3; SELECT COUNT\\(*\\) AS sessions FROM aksara_db.learning_sessions WHERE user_id=3;\")",
+      "Bash(mysql -u root -e ' *)",
+      "Bash(mysql -u root -e \"ALTER TABLE aksara_db.users ADD COLUMN goal_name VARCHAR\\(100\\) DEFAULT 'UTBK 2026' NULL AFTER daily_goal_minutes, ADD COLUMN goal_intensity INT DEFAULT 3 NOT NULL AFTER goal_name, ADD COLUMN goal_subjects TEXT NULL AFTER goal_intensity; DESCRIBE aksara_db.users;\")",
+      "Bash(mysql -u root -e \"UPDATE aksara_db.users SET goal_name='UTBK 2026', goal_intensity=3, goal_subjects='[\\\\\"Matematika\\\\\", \\\\\"Fisika\\\\\", \\\\\"Biologi\\\\\"]' WHERE id=3; SELECT id, username, goal_name, goal_intensity, goal_subjects FROM aksara_db.users WHERE id=3;\")",
+      "Bash(mysql -u root -e \"SELECT id, username, goal_name, goal_intensity, goal_subjects, daily_goal_minutes FROM aksara_db.users WHERE id=3;\")",
+      "Bash(mysql -u root -e \"UPDATE aksara_db.users SET daily_goal_minutes=30 WHERE id=3;\")",
+      "Bash(taskkill /f /im python.exe)",
+      "Bash(taskkill /f /im uvicorn.exe)",
+      "PowerShell(taskkill *)"
+    ]
+  }
+}
