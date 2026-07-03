@@ -17,6 +17,9 @@ Thumbs.db
 # Claude personal config
 .claude/
 
+# App images (screenshots)
+img/
+
 # IDE
 .vscode/
 .idea/
