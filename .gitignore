@@ -1,0 +1,22 @@
+# Dependencies
+be/venv/
+fe/node_modules/
+
+# Build output
+dist/
+
+# Environment
+.env
+be/.env
+fe/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude personal config
+.claude/
+
+# IDE
+.vscode/
+.idea/
