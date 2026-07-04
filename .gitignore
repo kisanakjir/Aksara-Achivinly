@@ -1,25 +1,37 @@
-# Dependencies
+# Dependencies — jangan commit node_modules / venv
 be/venv/
 fe/node_modules/
 
-# Build output
+# Build output — file hasil build gak perlu di repo
 dist/
+fe/dist/
 
-# Environment
+# Environment — API key & secret tiap orang beda
 .env
 be/.env
 fe/.env
 
-# OS
+# OS garbage
 .DS_Store
 Thumbs.db
 
-# Claude personal config
+# Markdown docs (riviewbug, matapelajaran, dll) — catatan lokal, bukan kode
+*.md
+!README.md
+
+# Claude AI personal config (memory, settings, dll) — privasi
 .claude/
 
-# App images (screenshots)
+# Screenshots & assets — file size gede, gak relevan buat code review
 img/
 
-# IDE
+# IDE settings — pilihan editor tiap orang beda
 .vscode/
 .idea/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Logs
+*.log

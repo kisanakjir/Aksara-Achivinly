@@ -1,49 +1,54 @@
 # Aksara EdTech
 
-A gamified learning platform for Indonesian UTBK/SNBT exam preparation.
+A gamified learning platform designed to help Indonesian high school students prepare for the UTBK/SNBT university entrance exams. Think of it as a study companion that turns exam prep into something that actually feels rewarding.
 
-## Status
+## The Story
 
-**MVP Clear** — Fokus utama saat ini adalah modul **Belajar (Materi)** dengan 22 mata pelajaran dan 31 materi video YouTube.
+Back when I was grinding for UTBK, I noticed something: there are tons of learning resources out there, but almost all of them feel like a chore. You watch videos, read materials, do practice questions -- and it gets boring fast. The ones that try to gamify things either look like theyre from 2010 or charge a monthly fee that high school students cant afford.
 
-Menu lain (Kuis, Petualangan, Diskusi, Peringkat, AI Chat) dinonaktifkan sementara sampai fitur siap dikembangkan.
+So I built Aksara. A platform where learning feels less like studying and more like progressing through a game. Track your daily streak, earn XP, level up, and actually see yourself improving -- without burning a hole in your pocket.
 
-## Features
+Right now, the platform is in its early stages. The main focus is the **Materials (Learn)** module -- 22 subjects with real YouTube video content, fully browsable. Other features (quizzes, adventure game, forum, leaderboard) are planned but not yet active, as Im prioritizing a solid foundation before spreading too thin.
 
-### ✅ Beranda (Dashboard)
-Daily learning progress tracker dengan statistik real-time — materi selesai, durasi belajar, progress bulanan, dan jam digital global (UTC-12 sampai UTC+14).
+## What Works Now
 
-### ✅ Materi (Learn)
-22 mata pelajaran lengkap kurikulum merdeka + UTBK dengan 31 materi video YouTube asli:
-- **Wajib (Nasional)**: Agama, Pancasila, Bahasa Indonesia, Matematika, Bahasa Inggris, PJOK, Informatika, Sejarah, Seni Budaya
-- **MIPA**: Fisika, Kimia, Biologi, Matematika Tingkat Lanjut
-- **IPS**: Ekonomi, Sosiologi, Geografi, Antropologi
-- **Bahasa & Budaya**: Bahasa Indonesia Tingkat Lanjut, Bahasa Inggris Tingkat Lanjut, Bahasa Asing
-- **Vokasi**: Prakarya & Kewirausahaan
-- **Seleksi PT**: UTBK / SNBT (Penalaran Umum, Pengetahuan Kuantitatif, Penalaran Matematika)
+### Dashboard
+Your daily command center. See how many minutes you've studied today, your monthly progress, current streak, and XP. It updates in real-time as you complete materials. Also features a global clock widget that supports all timezones (UTC-12 to UTC+14).
 
-### ⏸️ Menu Dinonaktifkan
-Kuis, Petualangan, Diskusi, Peringkat, AI Pribadi, IQ Report — kode masih utuh, tinggal aktifkan via tab di `App.tsx`.
+### Learning Materials
+The core feature right now. Browse through 22 subjects organized into curriculum groups:
 
-## Screenshots
+- **Wajib (Nasional)** -- Pendidikan Agama, Pancasila, Bahasa Indonesia, Matematika, Bahasa Inggris, PJOK, Informatika, Sejarah, Seni Budaya
+- **MIPA** -- Fisika, Kimia, Biologi, Matematika Tingkat Lanjut
+- **IPS** -- Ekonomi, Sosiologi, Geografi, Antropologi
+- **Bahasa & Budaya** -- Bahasa Indonesia Tingkat Lanjut, Bahasa Inggris Tingkat Lanjut, Bahasa Asing
+- **Vokasi** -- Prakarya & Kewirausahaan
+- **Seleksi Masuk PT** -- UTBK / SNBT (Penalaran Umum, Pengetahuan Kuantitatif, Penalaran Matematika)
 
-![Dashboard](img/dashboard.png)
+Each subject has at least one material with an embedded YouTube video. Pick a subject, watch a video, mark it complete, and earn XP. The sidebar shows your place in the playlist so you can jump between videos.
+
+### What is Disabled (For Now)
+
+The following features exist in the codebase but are hidden from the navigation to keep the scope focused. They will be enabled one by one as they mature:
+
+- Quiz/Tryout module
+- Adventure game map
+- Discussion forum
+- Leaderboard
+- AI Chat tutor
+- IQ Report analytics
 
 ## Tech Stack
 
 - **Frontend**: React 19, Vite, Tailwind CSS v4, Framer Motion
-- **Backend**: FastAPI (Python), SQLAlchemy, MySQL
-- **Express**: Frontend server (Vite middleware + API proxy)
-- **Authentication**: JWT (bcrypt + python-jose)
-- **AI**: Google Gemini API (optional)
+- **Backend API**: FastAPI (Python), SQLAlchemy, MySQL
+- **Dev Server**: Express (Vite middleware)
+- **Authentication**: JWT with bcrypt
+- **AI**: Google Gemini API (optional, for content generation)
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- Python 3.11+
-- MySQL database named `aksara_db`
+You need Node.js 18+, Python 3.11+, and a MySQL database named `aksara_db`.
 
 ### Setup
 
@@ -55,69 +60,85 @@ npm install
 # Backend
 cd be
 python -m venv venv
-venv\Scripts\activate   # Windows
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 ```
 
-Copy `be/.env.example` to `be/.env` and configure your settings.
+Copy `be/.env.example` to `be/.env` and fill in your settings (at minimum, the database URL).
 
-### Run
+### Running
+
+Open two terminals:
 
 ```bash
-# Terminal 1 — Backend
+# Terminal 1 — Backend API (port 8000)
 cd be && venv\Scripts\activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-# Terminal 2 — Frontend
+# Terminal 2 — Frontend (port 5173)
 cd fe && npm run dev
 ```
 
-Open **http://localhost:5173**
+Then open **http://localhost:5173**.
 
-Login: `IqbalMustafa` / `aksara123`
+Login with the seeded account: `IqbalMustafa` / `aksara123`.
 
-### Seed Data
+### Database Seeding
 
 ```bash
 cd be && venv\Scripts\activate && python seed_data.py
 ```
 
-Seed akan mengisi: 1 user, 22 subject, 31 materi dengan video YouTube.
+This populates the database with:
+- 1 user account
+- 22 subjects mapped to the Indonesian curriculum
+- 31 learning materials with YouTube video IDs
+- 7 days of sample daily stats
 
 ## Performance Notes
 
-- Background menggunakan **warna solid** (tanpa animasi/gradient) untuk performa maksimal di perangkat low-end dan mobile
-- Framer Motion hanya digunakan untuk elemen interaktif (floating nav), bukan idle animation
-- Bundle size diminimalkan dengan menghapus import komponen yang dinonaktifkan
-- Tidak ada `setInterval` tanpa cleanup atau infinite animation loop
+- Background uses a solid color instead of animated gradients or particle effects. This was a deliberate choice -- animated backgrounds chew through battery on laptops and make mobile devices stutter. The app should run smoothly even on older hardware.
+- Framer Motion is only used for interactive elements (the floating assistive nav), not for idle animations.
+- Disabled components are not imported at all -- they dont affect bundle size or load time.
+- All intervals and timeouts have proper cleanup. No memory leaks.
 
 ## Project Structure
 
 ```
-├── fe/               # React frontend + Express server
+├── fe/                   # React frontend + Express dev server
 │   ├── src/
-│   │   ├── components/   # UI components (Dashboard, Learn, dll)
-│   │   ├── charts/       # Chart components
-│   │   ├── contexts/     # Auth context
-│   │   └── services/     # API services
-│   └── server.ts      # Express dev server
-├── be/               # FastAPI backend
+│   │   ├── components/   # UI components (Dashboard, Learn, etc.)
+│   │   ├── charts/       # Chart components (activity, score, distribution)
+│   │   ├── contexts/     # Auth context provider
+│   │   ├── services/     # API client functions
+│   │   ├── App.tsx       # Root app with navigation
+│   │   ├── main.tsx      # Entry point
+│   │   ├── types.ts      # Shared TypeScript types
+│   │   └── index.css     # Global styles
+│   └── server.ts         # Express server (dev mode)
+├── be/                   # FastAPI backend
 │   ├── app/
-│   │   ├── routers/      # API endpoints
-│   │   ├── models/       # Database models
+│   │   ├── routers/      # API endpoints (auth, stats, materials, etc.)
+│   │   ├── models/       # SQLAlchemy models
 │   │   ├── services/     # Business logic
-│   │   └── schemas/      # Pydantic schemas
-│   └── seed_data.py   # Database seeder (22 subjects, 31 materials)
-├── matapelajaran.md  # Reference daftar mata pelajaran
-├── riviewbug.md      # Dokumentasi bug & fix
-└── img/              # App screenshots
+│   │   └── schemas/      # Pydantic request/response schemas
+│   └── seed_data.py      # Database seeder
+├── .gitignore
+├── README.md
+└── CLAUDE.md
 ```
+
+## Roadmap
+
+The immediate focus is stabilizing the learning module and adding more materials per subject. After that, the next features to enable are the Quiz system and the leaderboard -- those two have the most code already written and just need polishing.
+
+Everything else (game zone, AI chat, forum) will come later as the platform finds its audience.
 
 ## Contributing
 
-This project is open source. Contributions are welcome — feel free to open issues or submit pull requests.
+This is an open source project. Feel free to open issues, suggest features, or submit pull requests. The codebase is still young, so theres plenty of room to shape its direction.
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/my-feature`
-3. Commit your changes: `git commit -m 'feat: add my feature'`
-4. Push: `git push origin feature/my-feature`
-5. Open a Pull Request
+3. Commit your changes
+4. Push and open a Pull Request
