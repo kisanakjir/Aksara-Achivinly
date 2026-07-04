@@ -2,12 +2,28 @@
 
 A gamified learning platform for Indonesian UTBK/SNBT exam preparation.
 
+## Status
+
+**MVP Clear** — Fokus utama saat ini adalah modul **Belajar (Materi)** dengan 22 mata pelajaran dan 31 materi video YouTube.
+
+Menu lain (Kuis, Petualangan, Diskusi, Peringkat, AI Chat) dinonaktifkan sementara sampai fitur siap dikembangkan.
+
 ## Features
 
-### Dashboard (Working)
-Daily learning progress tracker with real-time stats — materials completed, study duration, monthly progress, and global clock.
+### ✅ Beranda (Dashboard)
+Daily learning progress tracker dengan statistik real-time — materi selesai, durasi belajar, progress bulanan, dan jam digital global (UTC-12 sampai UTC+14).
 
-*More features (Learn, Quiz, GameZone, Forum, Leaderboard, AI Chat) are under development.*
+### ✅ Materi (Learn)
+22 mata pelajaran lengkap kurikulum merdeka + UTBK dengan 31 materi video YouTube asli:
+- **Wajib (Nasional)**: Agama, Pancasila, Bahasa Indonesia, Matematika, Bahasa Inggris, PJOK, Informatika, Sejarah, Seni Budaya
+- **MIPA**: Fisika, Kimia, Biologi, Matematika Tingkat Lanjut
+- **IPS**: Ekonomi, Sosiologi, Geografi, Antropologi
+- **Bahasa & Budaya**: Bahasa Indonesia Tingkat Lanjut, Bahasa Inggris Tingkat Lanjut, Bahasa Asing
+- **Vokasi**: Prakarya & Kewirausahaan
+- **Seleksi PT**: UTBK / SNBT (Penalaran Umum, Pengetahuan Kuantitatif, Penalaran Matematika)
+
+### ⏸️ Menu Dinonaktifkan
+Kuis, Petualangan, Diskusi, Peringkat, AI Pribadi, IQ Report — kode masih utuh, tinggal aktifkan via tab di `App.tsx`.
 
 ## Screenshots
 
@@ -17,6 +33,7 @@ Daily learning progress tracker with real-time stats — materials completed, st
 
 - **Frontend**: React 19, Vite, Tailwind CSS v4, Framer Motion
 - **Backend**: FastAPI (Python), SQLAlchemy, MySQL
+- **Express**: Frontend server (Vite middleware + API proxy)
 - **Authentication**: JWT (bcrypt + python-jose)
 - **AI**: Google Gemini API (optional)
 
@@ -48,37 +65,50 @@ Copy `be/.env.example` to `be/.env` and configure your settings.
 
 ```bash
 # Terminal 1 — Backend
-cd be && venv\Scripts\activate && uvicorn app.main:app --port 8000
+cd be && venv\Scripts\activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 # Terminal 2 — Frontend
 cd fe && npm run dev
 ```
 
-Open **http://localhost:3000**
+Open **http://localhost:5173**
 
-### Seed Data (Optional)
+Login: `IqbalMustafa` / `aksara123`
+
+### Seed Data
 
 ```bash
 cd be && venv\Scripts\activate && python seed_data.py
 ```
 
+Seed akan mengisi: 1 user, 22 subject, 31 materi dengan video YouTube.
+
+## Performance Notes
+
+- Background menggunakan **warna solid** (tanpa animasi/gradient) untuk performa maksimal di perangkat low-end dan mobile
+- Framer Motion hanya digunakan untuk elemen interaktif (floating nav), bukan idle animation
+- Bundle size diminimalkan dengan menghapus import komponen yang dinonaktifkan
+- Tidak ada `setInterval` tanpa cleanup atau infinite animation loop
+
 ## Project Structure
 
 ```
-├── fe/               # React frontend
+├── fe/               # React frontend + Express server
 │   ├── src/
-│   │   ├── components/   # UI components
+│   │   ├── components/   # UI components (Dashboard, Learn, dll)
 │   │   ├── charts/       # Chart components
 │   │   ├── contexts/     # Auth context
 │   │   └── services/     # API services
-│   └── server.ts
+│   └── server.ts      # Express dev server
 ├── be/               # FastAPI backend
 │   ├── app/
 │   │   ├── routers/      # API endpoints
 │   │   ├── models/       # Database models
 │   │   ├── services/     # Business logic
 │   │   └── schemas/      # Pydantic schemas
-│   └── seed_data.py
+│   └── seed_data.py   # Database seeder (22 subjects, 31 materials)
+├── matapelajaran.md  # Reference daftar mata pelajaran
+├── riviewbug.md      # Dokumentasi bug & fix
 └── img/              # App screenshots
 ```
 

@@ -15,6 +15,8 @@
 | 4 | Avatar profile tidak muncul di Settings & Nav Account | 🟠 High | Settings, Nav Header | ✅ Selesai |
 | 5 | Target Belajar (nama, intensitas, mapel) tidak konek ke Dashboard | 🟠 High | Dashboard, LearningGoals | ✅ Selesai |
 | 6 | Materi/Durasi nambah walau bukan fokus mapel + Statistik statis + Pengingat tidak berguna | 🟠 High | Dashboard, Learn | ✅ Selesai |
+| 7 | Pilihan mapel tidak lengkap + tingkat kesulitan menghalangi navigasi | 🟠 High | Learn | ✅ Selesai |
+| 8 | Hanya 3 materi demo, belum ada konten nyata untuk semua mapel | 🟡 Medium | Learn | ✅ Selesai |
 
 ---
 
@@ -600,6 +602,132 @@ Developer keliru membedakan dua objek SQLAlchemy yang mirip:
 
 ---
 
+---
+
+## 🟠 Bug #7: Pilihan Mata Pelajaran Tidak Lengkap + Tingkat Kesulitan Mengganggu Navigasi
+
+### Masalah
+1. **Mapel tidak lengkap** — Pilihan mata pelajaran di halaman Belajar cuma ada: Matematika, Fisika, Biologi, Kimia, UTBK / SNBT. Mapel wajib seperti Bahasa Indonesia, Bahasa Inggris, Ekonomi, Sosiologi, Geografi, Sejarah tidak ada.
+2. **Tingkat kesulitan menghalangi akses** — User dipaksa milih tingkat kesulitan (Fundamental, Basic, Intermediate, Advanced, UTBK Level) dulu sebelum bisa lihat materi. Ini bikin user harus klik 3-4× sebelum sampai ke video belajar.
+
+### Penyebab
+#### 7a — Mapel tidak lengkap
+```typescript
+// Learn.tsx — SEBELUM
+const mapelList = ["Matematika", "Fisika", "Biologi", "Kimia", "UTBK / SNBT"];
+```
+Hanya 5 mapel, padahal UTBK mencakup 10+ mata pelajaran.
+
+#### 7b — Filter tingkat kesulitan hardcoded
+```typescript
+// Learn.tsx — SEBELUM
+const [selectedLevel, setSelectedLevel] = useState<LearnLevel>(LearnLevel.BASIC);
+...
+return m.category === selectedMapel && m.level === selectedLevel;
+```
+Setiap materi punya level, dan daftar materi difilter berdasarkan level yang dipilih — jadi user cuma liat materi di satu level doang.
+
+### Fix
+
+#### 7a — Mapel dilengkapi (full kurikulum + grouped)
+`mapelList` di-refactor jadi `mapelGroups` dengan 6 grup — total **22 mapel** sesuai `matapelajaran.md`:
+
+```typescript
+const mapelGroups: { group: string; items: string[] }[] = [
+  {
+    group: "Wajib (Nasional)",
+    items: ["Pendidikan Agama & Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "Bahasa Inggris", "PJOK", "Informatika", "Sejarah", "Seni & Budaya"]
+  },
+  { group: "MIPA", items: ["Fisika", "Kimia", "Biologi", "Matematika Tingkat Lanjut"] },
+  { group: "IPS", items: ["Ekonomi", "Sosiologi", "Geografi", "Antropologi"] },
+  { group: "Bahasa & Budaya", items: ["Bahasa Indonesia Tingkat Lanjut", "Bahasa Inggris Tingkat Lanjut", "Bahasa Asing"] },
+  { group: "Vokasi", items: ["Prakarya & Kewirausahaan"] },
+  { group: "Seleksi Masuk PT", items: ["UTBK / SNBT"] },
+];
+```
+
+Juga update `types.ts` — `Material.category` diganti jadi `string` (dinamis) biar gak perlu update tipe tiap kali nambah mapel.
+
+#### 7b — Tingkat kesulitan dihapus dari navigasi
+```typescript
+// Learn.tsx — SESUDAH
+// State selectedLevel dihapus
+// Filter jadi cuma by mapel doang:
+return m.category === selectedMapel;
+// (untuk UTBK: + filter subCategory)
+return m.category === selectedMapel && m.subCategory === selectedSubtest;
+```
+
+**Yang diubah:**
+| Item | Sebelum | Sesudah |
+|------|---------|---------|
+| State `selectedLevel` | Ada, default BASIC | ❌ Dihapus |
+| Button tingkat kesulitan | 5 tombol (Fundamental s/d UTBK Level) | ❌ Dihapus total |
+| Filter materi | `m.category === mapel && m.level === level` | ✅ Cuma `m.category === mapel` |
+| Sidebar playlist detail | Filter `m.level === selectedMaterial.level` | ✅ No filter level, semua materi mapel tampil |
+| Tag level di detail card | Masih tampil (informatif) | ✅ Tetap — kasih tau user level materi |
+
+### Severity
+🟠 **High** — navigasi materi jadi lambat (harus filter berlapis), dan banyak mapel UTBK yang tidak kebuka.
+
+### Root Cause
+Developer awal cuma masukin 5 mapel yang gampang + make filter tingkat kesulitan tanpa mikir UX: user UTBK butuh akses cepat ke semua materi tanpa harus milih level dulu.
+
+### File yang Diubah
+| File | Perubahan |
+|------|-----------|
+| `fe/src/components/Learn.tsx` | mapelList +6, hapus selectedLevel, hapus section tingkat kesulitan, ubah filter, hapus filter level di sidebar |
+| `fe/src/types.ts` | Union type `Material.category` tambah 4 mapel baru |
+
+---
+
+## 🟡 Bug #8: Hanya 3 Materi Demo — Belum Ada Konten Nyata untuk Semua Mapel
+
+### Masalah
+`initialMaterials` cuma berisi 3 materi: Matematika, UTBK, dan Fisika. 19 mapel lainnya **tidak punya konten sama sekali** — user milih mapel lain cuma liat "Materi belum tersedia".
+
+### Penyebab
+Developer cuma masukin materi sebagai contoh/sampel, bukan sebagai konten lengkap.
+
+### Fix
+**`initialMaterials` diperluas dari 3 menjadi 28 materi** — minimal 1 materi per mapel, dengan video YouTube asli.
+
+| Grup | Mapel | Video ID | Topik |
+|------|-------|----------|-------|
+| **Wajib** | Pend. Agama | `1qyIiJ2Z9KA` | Iman, Islam, Ihsan |
+| | Pend. Pancasila | `9Eu733Q7PhU` | Bhinneka Tunggal Ika |
+| | Bahasa Indonesia | `0fAXtsReT64` | Teks Argumentasi |
+| | Matematika | `AVhhqQABddk`, `2HwfsBqqrHE` | Turunan Fungsi Aljabar |
+| | Bahasa Inggris | `3XC3-67vQGI` | Narrative Text |
+| | PJOK | `0EJQtK_wxxM` | Kebugaran Jasmani |
+| | Informatika | `3hPnxPTbR0o` | Algoritma |
+| | Sejarah | `_WsMFuKKFoE`, `0QaIEa06TrE` | Hindu-Buddha |
+| | Seni & Budaya | `_QS-67CtL3E` | Menggambar 2 Dimensi |
+| **MIPA** | Fisika | `0B_oCGTh-54`, `1scecjMJwq8` | Hukum Newton |
+| | Kimia | `3zHWfZ16fVo`, `3XMbIHKQ6WY` | Stoikiometri |
+| | Biologi | `_JV38mH82F0` | Struktur Sel |
+| | MTK Lanjut | `_ycgBH7nIQE`, `02MK6br3940` | Trigonometri & Polinomial |
+| **IPS** | Ekonomi | `_TsyUrSkRqU`, `_jmDxQc48jw` | Permintaan-Penawaran & Kelangkaan |
+| | Sosiologi | `5TdQMBgy1e4`, `6jWVxEgh1b8` | Interaksi Sosial |
+| | Geografi | `5Agxr3tljLI` | Prinsip Geografi |
+| | Antropologi | `aTDA7Io1oEg` | Pengertian Antropologi |
+| **Bahasa** | BI Tingkat Lanjut | `1YnfRM7_8uo` | Karya Tulis Ilmiah |
+| | BIng Tingkat Lanjut | `_k75vxX4cRk` | Analytical Exposition |
+| | Bahasa Asing | `_S00iW5DrAE` | Mandarin Perkenalan |
+| **Vokasi** | Prakarya | `_jDQQJtXWVg` | Produksi Kerajinan |
+| **PT** | UTBK PU | `3q1q2UVTkUk` | Penalaran Umum |
+| | UTBK PK | `1g_bLjuvp2Y` | Pengetahuan Kuantitatif |
+| | UTBK PM | `1Pwt89OI50g` | Penalaran Matematika |
+
+**Catatan:** Video diambil dari YouTube — kualitas konten sesuai channel asli. Jika ada video yang di-takedown, user akan liat fallback "Materi ini berbasis teks interaktif".
+
+### File yang Diubah
+| File | Perubahan |
+|------|-----------|
+| `fe/src/components/Learn.tsx` | `initialMaterials` dari 3 → 28 materi dengan video YouTube asli |
+
+---
+
 ## 🔍 Ringkasan Bug
 
 | No | Bug | Akar Masalah | Fix Utama | File yang Diubah |
@@ -610,6 +738,8 @@ Developer keliru membedakan dua objek SQLAlchemy yang mirip:
 | 4 | Avatar tidak muncul | 3 titik: UserStats tanpa avatar_url, sync kurang, render inisial doang | Tambah field ke UserStats, sync dari AuthContext, render <img> | types.ts, App.tsx, Settings.tsx |
 | 5 | Target Belajar tidak konek ke Dashboard | 3 celah: DB kurang kolom goal, callback ngga nyampe, Dashboard ngga render | Tambah 3 kolom DB/API, callback full data, redesign Dashboard cards | user.py, settings.py, types.ts, App.tsx, LearningGoals.tsx, Dashboard.tsx, seed_data.py |
 | 6 | Materi/Durasi nambah tanpa filter + Statistik statis + Pengingat jelek | 3 bug jadi 1: (a) tidak ada filter fokus mapel, (b) rata-rata harian/mingguan/bulanan statis, (c) pengingat gak kepake | (a) filter fokus mapel di handleCompleteMaterial, (b) ganti jadi progress bulanan kalkulasi intensitas, (c) ganti jadi jam digital real-time + UTC selector | App.tsx, Learn.tsx, Dashboard.tsx |
+| 7 | Pilihan mapel tidak lengkap + tingkat kesulitan menghalangi navigasi | mapelList cuma 5, filter level bikin akses lambat | Refactor jadi 6 grup (22 mapel) sesuai kurikulum + hapus filter level | Learn.tsx, types.ts |
+| 8 | Hanya 3 materi demo — belum ada konten nyata untuk semua mapel | Tidak ada konten materi untuk 19 dari 22 mapel | Tambah 28 materi dengan video YouTube asli, mencakup seluruh 22 mapel | Learn.tsx |
 
 ### Checklist Verifikasi Cepat
 

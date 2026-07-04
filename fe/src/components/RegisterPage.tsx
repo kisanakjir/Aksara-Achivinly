@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "motion/react";
+
 import { GraduationCap, Eye, EyeOff, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -59,9 +59,9 @@ export default function RegisterPage({ onSwitchToLogin, isDarkMode }: RegisterPa
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
+        
+        
         className={`w-full max-w-md p-8 sm:p-10 rounded-[2.5rem] border shadow-2xl relative overflow-hidden ${
           isDarkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white/90 border-white shadow-indigo-100/50"
         }`}
@@ -70,13 +70,13 @@ export default function RegisterPage({ onSwitchToLogin, isDarkMode }: RegisterPa
 
         <div className="relative z-10">
           <div className="text-center mb-8">
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            <div
+              
+              
               className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-lg mb-4"
             >
               <GraduationCap className="w-8 h-8" />
-            </motion.div>
+            </div>
             <h1 className="text-2xl font-black">Daftar Akun Baru</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Mulai petualangan belajarmu bersama Aksara</p>
           </div>
@@ -188,7 +188,7 @@ export default function RegisterPage({ onSwitchToLogin, isDarkMode }: RegisterPa
             </button>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

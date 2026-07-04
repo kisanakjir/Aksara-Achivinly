@@ -9,7 +9,7 @@ export enum LearnLevel {
 export interface Material {
   id: string;
   title: string;
-  category: "Math" | "Physics" | "Biology" | "Chemistry" | "Indonesian" | "English" | "General" | "Matematika" | "Fisika" | "Biologi" | "Kimia" | "Bahasa Indonesia" | "Bahasa Inggris" | "UTBK / SNBT";
+  category: string;
   subCategory?: string;
   subjectId?: number;
   level: LearnLevel;

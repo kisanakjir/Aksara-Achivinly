@@ -214,7 +214,7 @@ app.post("/api/forum/post/:id/upvote", (req, res) => {
   res.json({ success: true, upvotes: post.upvotes });
 });
 
-// GROUP CHAT ENDPOINTS
+// CHAT ENDPOINTS
 app.get("/api/chat/:channel", (req, res) => {
   const { channel } = req.params;
   const filtered = chatMessages.filter(m => m.channelId === channel);

@@ -1,106 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  Trophy, BookOpen, GraduationCap, Gamepad2, MessageSquare,
-  Sun, Moon, LayoutDashboard, Brain, Flame, Bot, Settings, LogOut, Target, Zap
+  BookOpen, GraduationCap, Sun, Moon, LayoutDashboard,
+  Brain, Flame, Settings, LogOut, Zap
 } from "lucide-react";
 
 import { UserStats } from "./types";
 import Dashboard from "./components/Dashboard";
 import Learn from "./components/Learn";
-import Quiz from "./components/Quiz";
-import GameZone from "./components/GameZone";
-import Forum from "./components/Forum";
-import Leaderboard from "./components/Leaderboard";
-import AiChat from "./components/AiChat";
 import SettingsPage from "./components/Settings";
-import LearningGoals from "./components/LearningGoals";
-import EditProfile from "./components/EditProfile";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import { useAuth } from "./contexts/AuthContext";
 
-function IqReportView({ stats, isDarkMode }: { stats: UserStats, isDarkMode: boolean }) {
-  const subjects = [
-    { name: "Logika Matematika", score: 92, type: "UTBK", icon: Brain, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-900/20", border: "border-blue-200 dark:border-blue-800/50" },
-    { name: "Pemahaman Literasi", score: 88, type: "Kuis", icon: BookOpen, color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-900/20", border: "border-emerald-200 dark:border-emerald-800/50" },
-    { name: "Kecepatan Analisis", score: 95, type: "Game", icon: Zap, color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-900/20", border: "border-amber-200 dark:border-amber-800/50" },
-    { name: "Penalaran Umum", score: 85, type: "UTBK", icon: Target, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-900/20", border: "border-purple-200 dark:border-purple-800/50" },
-  ];
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`max-w-4xl mx-auto p-6 sm:p-10 rounded-[2.5rem] border shadow-2xl relative overflow-hidden mt-8 ${
-        isDarkMode ? 'bg-zinc-900/80 border-zinc-800 shadow-black/50 backdrop-blur-xl' : 'bg-white/80 border-white shadow-indigo-100/50 backdrop-blur-xl'
-      }`}
-    >
-      {/* Background Decor */}
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div className="text-center relative z-10 mb-12">
-        <motion.div 
-          animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }} 
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="inline-flex items-center justify-center p-6 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 mb-6"
-        >
-          <Brain className="w-16 h-16 text-blue-600 dark:text-blue-400 drop-shadow-md" />
-        </motion.div>
-        <h2 className="text-3xl font-black mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Analitik Kognitif IQ</h2>
-        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-          Laporan cerdas berbasis AI yang mengevaluasi performa Anda secara real-time dari Tryout UTBK, Kuis Latihan, dan Arena Game.
-        </p>
-        
-        <div className="mt-8 inline-block relative">
-          <div className="absolute inset-0 bg-blue-500 blur-xl opacity-20 rounded-full animate-pulse"></div>
-          <div className="relative text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 drop-shadow-sm">
-            {stats.iqScoreEstimate || "Menghitung..."}
-          </div>
-          <div className="text-xs font-bold text-indigo-500 uppercase tracking-widest mt-2">Estimasi IQ Kognitif</div>
-        </div>
-      </div>
-
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-sm font-black uppercase tracking-widest text-gray-400">Distribusi Kemampuan</h3>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {subjects.map((sub, i) => (
-            <motion.div 
-              key={sub.name}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className={`p-5 rounded-2xl border ${sub.bg} ${sub.border} flex items-center gap-5 transition-transform hover:-translate-y-1`}
-            >
-              <div className={`p-3 rounded-xl bg-white dark:bg-zinc-950 shadow-sm ${sub.color}`}>
-                <sub.icon className="w-6 h-6" />
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{sub.type}</span>
-                  <span className={`text-sm font-black ${sub.color}`}>{sub.score}/100</span>
-                </div>
-                <h4 className="font-bold text-base mb-2">{sub.name}</h4>
-                <div className="w-full h-1.5 bg-gray-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${sub.score}%` }}
-                    transition={{ duration: 1, delay: i * 0.1 + 0.5 }}
-                    className={`h-full ${sub.color.replace('text-', 'bg-')}`}
-                  ></motion.div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 export default function App() {
   const { isAuthenticated, isLoading, user, logout } = useAuth();
@@ -216,7 +128,6 @@ export default function App() {
 
   // Jika belum login, tampilkan halaman auth
   if (!isAuthenticated) {
-    document.documentElement.classList.toggle("dark", isDarkMode);
     return (
       <div className={`min-h-screen ${isDarkMode ? "bg-stars text-zinc-100" : "bg-golden-waves text-zinc-900"}`} id="app-container">
         <div className="fixed top-4 right-4 z-50">
@@ -292,37 +203,6 @@ export default function App() {
     });
   };
 
-  const handleCompleteQuiz = (xpEarned: number, accuracyScore: number, solvedCount: number) => {
-    setUserStats(prev => {
-      let nextXp = prev.currentXp + xpEarned;
-      let nextLevel = prev.level;
-      let nextXpToNextLevel = prev.xpToNextLevel;
-
-      if (nextXp >= nextXpToNextLevel) {
-        nextLevel += 1;
-        nextXp = nextXp - nextXpToNextLevel;
-        nextXpToNextLevel = Math.round(nextXpToNextLevel * 1.2);
-      }
-      const updatedBadges = [...prev.badges];
-      if (accuracyScore === 100 && !updatedBadges[4].unlockedAt) {
-        updatedBadges[4].unlockedAt = new Date().toISOString().split("T")[0];
-      }
-      const updated = {
-        ...prev,
-        currentXp: nextXp,
-        level: nextLevel,
-        xpToNextLevel: nextXpToNextLevel,
-        totalQuestionsSolved: prev.totalQuestionsSolved + solvedCount,
-        averageScores: {
-          ...prev.averageScores,
-          daily: Math.round((prev.averageScores.daily + accuracyScore) / 2)
-        },
-        badges: updatedBadges
-      };
-      syncLeaderboard(updated);
-      return updated;
-    });
-  };
 
   const handleEarnXp = (xpReward: number) => {
     setUserStats(prev => {
@@ -355,31 +235,14 @@ export default function App() {
     setUserStats(prev => ({ ...prev, dailyGoalMinutes: minutes }));
   };
 
-  const handleGoalUpdated = (data: { daily_goal_minutes: number; goal_name: string; goal_intensity: number; goal_subjects: string[] }) => {
-    setUserStats(prev => ({
-      ...prev,
-      dailyGoalMinutes: data.daily_goal_minutes,
-      goalName: data.goal_name,
-      goalIntensity: data.goal_intensity,
-      goalSubjects: data.goal_subjects,
-    }));
-  };
-
   const tabs = [
     { id: "dashboard", icon: LayoutDashboard, label: "Beranda" },
     { id: "learn", icon: BookOpen, label: "Materi" },
-    { id: "quiz", icon: GraduationCap, label: "Kuis" },
-    { id: "game", icon: Gamepad2, label: "Petualangan" },
-    { id: "forum", icon: MessageSquare, label: "Diskusi" },
-    { id: "leaderboard", icon: Trophy, label: "Peringkat" },
-    { id: "ai_chat", icon: Bot, label: "AI Pribadi" }
   ];
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-300 overflow-x-hidden ${
-      isDarkMode ? "bg-stars text-zinc-100" : "bg-golden-waves text-zinc-900"
-    }`} id="app-container">
-      
+    <div className={`min-h-screen ${isDarkMode ? "bg-stars text-zinc-100" : "bg-golden-waves text-zinc-900"}`} id="app-container">
+
       {/* ASSISTIVE TOUCH (Floating Interactive Logo) */}
       <AnimatePresence>
         {navMode === "assistive" && (
@@ -394,7 +257,7 @@ export default function App() {
             className="fixed top-24 left-4 z-[70] flex flex-col items-center gap-2"
           >
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setIsAssistiveOpen(!isAssistiveOpen)}
                 onContextMenu={(e) => { e.preventDefault(); setNavMode("full"); setIsAssistiveOpen(false); }}
                 className="w-14 h-14 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-xl border border-gray-200 dark:border-zinc-700 shadow-2xl rounded-full flex items-center justify-center cursor-move"
@@ -438,14 +301,8 @@ export default function App() {
       </AnimatePresence>
 
       {/* FULL HEADER (Brand, Dynamic Island, Profile) */}
-      <AnimatePresence>
-        {navMode === "full" && (
-          <motion.header 
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -50, opacity: 0 }}
-            className="fixed top-4 left-0 right-0 z-50 flex items-start justify-between px-4 sm:px-8 pointer-events-none"
-          >
+      {navMode === "full" && (
+        <header className="fixed top-4 left-0 right-0 z-50 flex items-start justify-between px-4 sm:px-8 pointer-events-none">
             
             {/* Left: Brand (Click to enter Assistive Mode) */}
             <div 
@@ -564,104 +421,48 @@ export default function App() {
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
-          </motion.header>
+
+          </header>
         )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {navMode === "full" && (
-          <motion.nav 
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
-            className="md:hidden fixed bottom-4 left-4 right-4 z-50 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200/50 dark:border-zinc-700/50 shadow-2xl rounded-2xl p-2 flex items-center justify-between overflow-x-auto hide-scrollbar"
-          >
+      {navMode === "full" && (
+        <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200/50 dark:border-zinc-700/50 shadow-2xl rounded-2xl p-2 flex items-center justify-between overflow-x-auto hide-scrollbar">
               {tabs.map(item => (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all shrink-0 ${
-                    activeTab === item.id 
-                      ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400" 
-                      : "text-gray-500 dark:text-gray-400"
+                    activeTab === item.id ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
                   <item.icon className="w-5 h-5 mb-1" />
                   <span className="text-[9px] font-bold tracking-tight">{item.label}</span>
                 </button>
               ))}
-          </motion.nav>
+          </nav>
         )}
-      </AnimatePresence>
 
       {/* BODY CONTENT (Padding Top for fixed header) */}
       <main className="pt-28 pb-24 md:pb-12 max-w-7xl mx-auto px-4 sm:px-8" id="app-body">
-        <AnimatePresence mode="wait">
-          {activeTab === "dashboard" && (
-            <motion.div key="dashboard" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <Dashboard stats={userStats} onSetDailyGoal={handleSetDailyGoal} isDarkMode={isDarkMode} onNavigate={setActiveTab} />
-            </motion.div>
-          )}
+        {activeTab === "dashboard" && (
+          <div key="dashboard">
+            <Dashboard stats={userStats} onSetDailyGoal={handleSetDailyGoal} isDarkMode={isDarkMode} onNavigate={setActiveTab} />
+          </div>
+        )}
 
-          {activeTab === "learn" && (
-            <motion.div key="learn" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <Learn onCompleteMaterial={handleCompleteMaterial} isDarkMode={isDarkMode} userLevel={userStats.level} />
-            </motion.div>
-          )}
+        {activeTab === "learn" && (
+          <div key="learn">
+            <Learn onCompleteMaterial={handleCompleteMaterial} isDarkMode={isDarkMode} userLevel={userStats.level} />
+          </div>
+        )}
 
-          {activeTab === "quiz" && (
-            <motion.div key="quiz" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <Quiz onCompleteQuiz={handleCompleteQuiz} isDarkMode={isDarkMode} />
-            </motion.div>
-          )}
+        {/* MENU LAINNYA AKAN DIAKTIFKAN SAAT FITUR SIAP */}
 
-          {activeTab === "game" && (
-            <motion.div key="game" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <GameZone onEarnXp={handleEarnXp} isDarkMode={isDarkMode} />
-            </motion.div>
-          )}
-
-          {activeTab === "forum" && (
-            <motion.div key="forum" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <Forum username={userStats.username} userLevel={userStats.level} isDarkMode={isDarkMode} />
-            </motion.div>
-          )}
-
-          {activeTab === "leaderboard" && (
-            <motion.div key="leaderboard" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <Leaderboard stats={userStats} isDarkMode={isDarkMode} />
-            </motion.div>
-          )}
-
-          {activeTab === "ai_chat" && (
-            <motion.div key="ai_chat" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}} className="h-[75vh]">
-              <AiChat />
-            </motion.div>
-          )}
-
-          {activeTab === "iq_report" && (
-            <motion.div key="iq_report" initial={{opacity:0, scale:0.95}} animate={{opacity:1, scale:1}} exit={{opacity:0, scale:0.95}}>
-              <IqReportView stats={userStats} isDarkMode={isDarkMode} />
-            </motion.div>
-          )}
-
-          {activeTab === "settings" && (
-            <motion.div key="settings" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <SettingsPage isDarkMode={isDarkMode} onNavigate={setActiveTab} />
-            </motion.div>
-          )}
-
-          {activeTab === "learning-goals" && (
-            <motion.div key="learning-goals" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <LearningGoals isDarkMode={isDarkMode} onBack={() => setActiveTab("settings")} onGoalUpdated={handleGoalUpdated} />
-            </motion.div>
-          )}
-
-          {activeTab === "edit-profile" && (
-            <motion.div key="edit-profile" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-10}}>
-              <EditProfile isDarkMode={isDarkMode} onBack={() => setActiveTab("settings")} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* SETTINGS & SUB-HALAMAN TETAP AKTIF */}
+        {activeTab === "settings" && (
+          <div key="settings">
+            <SettingsPage isDarkMode={isDarkMode} onNavigate={setActiveTab} />
+          </div>
+        )}
       </main>
     </div>
   );

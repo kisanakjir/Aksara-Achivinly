@@ -13,45 +13,392 @@ interface LearnProps {
   userLevel: number;
 }
 
-const mapelList = ["Matematika", "Fisika", "Biologi", "Kimia", "UTBK / SNBT"];
+const mapelGroups: { group: string; items: string[] }[] = [
+  {
+    group: "Wajib (Nasional)",
+    items: ["Pendidikan Agama & Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "Bahasa Inggris", "PJOK", "Informatika", "Sejarah", "Seni & Budaya"]
+  },
+  {
+    group: "MIPA",
+    items: ["Fisika", "Kimia", "Biologi", "Matematika Tingkat Lanjut"]
+  },
+  {
+    group: "IPS",
+    items: ["Ekonomi", "Sosiologi", "Geografi", "Antropologi"]
+  },
+  {
+    group: "Bahasa & Budaya",
+    items: ["Bahasa Indonesia Tingkat Lanjut", "Bahasa Inggris Tingkat Lanjut", "Bahasa Asing"]
+  },
+  {
+    group: "Vokasi",
+    items: ["Prakarya & Kewirausahaan"]
+  },
+  {
+    group: "Seleksi Masuk PT",
+    items: ["UTBK / SNBT"]
+  }
+];
+
+const mapelList = mapelGroups.flatMap(g => g.items);
 const utbkSubtests = ["Penalaran Umum", "Pengetahuan Kuantitatif", "Pemahaman Bacaan & Menulis", "Pengetahuan & Pemahaman Umum", "Literasi Bahasa Indonesia", "Literasi Bahasa Inggris", "Penalaran Matematika"];
 
 const initialMaterials: Material[] = [
+  // ============ WAJIB (NASIONAL) ============
   {
-    id: "mat_1",
-    title: "Konsep Dasar Turunan Fungsi Aljabar",
-    category: "Matematika",
-    level: LearnLevel.BASIC,
-    type: "text",
-    content: `### Pengantar Turunan Fungsi Aljabar\n\nTurunan fungsi aljabar adalah konsep pengukuran bagaimana suatu fungsi berubah seiring perubahan nilai masukannya.\n\n#### Rumus Utama\nUntuk setiap fungsi aljabar berbentuk f(x) = ax^n, turunan pertamanya adalah:\nf'(x) = a * n * x^(n-1)\n\n#### Tips Kilat\nJika f(x) berbentuk pecahan linear (ax+b)/(cx+d), turunan pertamanya bisa langsung menggunakan rumus cepat: f'(x) = (ad - bc) / (cx+d)^2`,
-    videoUrl: "https://www.youtube.com/watch?v=F77v6PzXW84",
-    youtubeId: "F77v6PzXW84",
-    durationMinutes: 10,
+    id: "mat_pai_1",
+    title: "Konsep Iman, Islam, dan Ihsan",
+    category: "Pendidikan Agama & Budi Pekerti",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Materi ini membahas tiga pilar utama dalam ajaran Islam: Iman (percaya), Islam (tunduk), dan Ihsan (kesempurnaan). Dipelajari hubungan antara ketiganya serta implementasi dalam kehidupan sehari-hari.",
+    youtubeId: "1qyIiJ2Z9KA",
+    durationMinutes: 15,
     xpReward: 100
   },
   {
-    id: "mat_2",
-    title: "TPS Penalaran Umum Taktis",
-    category: "UTBK / SNBT",
-    subCategory: "Penalaran Umum",
+    id: "mat_pp_1",
+    title: "Makna Bhinneka Tunggal Ika",
+    category: "Pendidikan Pancasila",
     level: LearnLevel.FUNDAMENTAL,
     type: "video",
-    content: "Video ini membahas trik jitu menganalisis teks panjang dan menarik kesimpulan logis secara instan pada soal TPS Penalaran Umum UTBK.",
-    youtubeId: "Xh0mG2V8-K4",
+    content: "Pembahasan mendalam tentang asal-usul, makna, dan implementasi semboyan Bhinneka Tunggal Ika dalam kehidupan berbangsa dan bernegara di Indonesia.",
+    youtubeId: "9Eu733Q7PhU",
+    durationMinutes: 12,
+    xpReward: 100
+  },
+  {
+    id: "mat_bi_1",
+    title: "Teks Argumentasi: Struktur dan Kebahasaan",
+    category: "Bahasa Indonesia",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Belajar mengenali, menganalisis, dan menulis teks argumentasi. Mencakup pengertian, struktur (pendahuluan, argumen, penegasan ulang), dan kaidah kebahasaan teks argumentasi.",
+    youtubeId: "0fAXtsReT64",
     durationMinutes: 15,
+    xpReward: 100
+  },
+  {
+    id: "mat_mtk_1",
+    title: "Konsep Dasar Turunan Fungsi Aljabar",
+    category: "Matematika",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Materi ini membahas konsep turunan fungsi aljabar secara fundamental — mulai dari definisi limit hingga rumus utama turunan. Dibahas juga aplikasi sederhana turunan dalam kehidupan sehari-hari.",
+    youtubeId: "AVhhqQABddk",
+    durationMinutes: 18,
+    xpReward: 120
+  },
+  {
+    id: "mat_mtk_2",
+    title: "Cara Mudah Turunan Fungsi Aljabar",
+    category: "Matematika",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Pembahasan step-by-step menyelesaikan soal turunan fungsi aljabar dengan cara cepat dan mudah dipahami. Cocok untuk pemula yang baru belajar turunan.",
+    youtubeId: "2HwfsBqqrHE",
+    durationMinutes: 12,
+    xpReward: 100
+  },
+  {
+    id: "mat_bing_1",
+    title: "Narrative Text: Structure & Language Features",
+    category: "Bahasa Inggris",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Materi lengkap tentang Narrative Text dalam Bahasa Inggris — mencakup pengertian, generic structure (orientation, complication, resolution), dan language features yang digunakan.",
+    youtubeId: "3XC3-67vQGI",
+    durationMinutes: 14,
+    xpReward: 100
+  },
+  {
+    id: "mat_pjok_1",
+    title: "Komponen Kebugaran Jasmani",
+    category: "PJOK",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Materi tentang komponen-komponen kebugaran jasmani, jenis latihan untuk masing-masing komponen, serta cara mengukur tingkat kebugaran jasmani secara mandiri.",
+    youtubeId: "0EJQtK_wxxM",
+    durationMinutes: 12,
+    xpReward: 80
+  },
+  {
+    id: "mat_tik_1",
+    title: "Algoritma: Dasar Berpikir Komputasional",
+    category: "Informatika",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Mengenal konsep algoritma sebagai fondasi berpikir komputasional. Dibahas pengertian, ciri-ciri, dan contoh algoritma dalam kehidupan sehari-hari serta dalam pemrograman sederhana.",
+    youtubeId: "3hPnxPTbR0o",
+    durationMinutes: 10,
+    xpReward: 80
+  },
+  {
+    id: "mat_sjrh_1",
+    title: "Perkembangan Hindu-Buddha di Indonesia",
+    category: "Sejarah",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Membahas proses masuknya agama Hindu dan Buddha ke Indonesia, pengaruhnya terhadap kebudayaan lokal, serta kerajaan-kerajaan Hindu-Buddha pertama di Nusantara.",
+    youtubeId: "_WsMFuKKFoE",
+    durationMinutes: 16,
+    xpReward: 110
+  },
+  {
+    id: "mat_sjrh_2",
+    title: "Kerajaan Hindu-Buddha di Indonesia",
+    category: "Sejarah",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Penjelasan detail tentang kerajaan-kerajaan Hindu-Buddha di Indonesia — Kerajaan Kutai, Tarumanegara, Sriwijaya, Mataram Kuno, dan Majapahit. Mencakup aspek politik, ekonomi, dan budaya.",
+    youtubeId: "0QaIEa06TrE",
+    durationMinutes: 18,
+    xpReward: 120
+  },
+  {
+    id: "mat_senbud_1",
+    title: "Menggambar 2 Dimensi",
+    category: "Seni & Budaya",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Memahami konsep seni rupa dua dimensi: unsur-unsur visual (garis, bentuk, warna, tekstur), prinsip-prinsip komposisi, serta teknik dasar menggambar 2D.",
+    youtubeId: "_QS-67CtL3E",
+    durationMinutes: 14,
+    xpReward: 80
+  },
+
+  // ============ MIPA ============
+  {
+    id: "mat_fis_1",
+    title: "Hukum Newton tentang Gerak",
+    category: "Fisika",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Pembahasan lengkap Hukum I, II, dan III Newton — konsep kelembaman, hubungan gaya-massa-percepatan, dan aksi-reaksi. Dilengkapi contoh soal dan aplikasi dalam kehidupan.",
+    youtubeId: "0B_oCGTh-54",
+    durationMinutes: 15,
+    xpReward: 120
+  },
+  {
+    id: "mat_fis_2",
+    title: "Aplikasi Hukum Newton dalam Soal",
+    category: "Fisika",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Latihan soal aplikasi Hukum Newton. Mulai dari soal sederhana hingga soal cerita yang sering muncul di ujian. Dibahas dengan metode step-by-step yang mudah diikuti.",
+    youtubeId: "1scecjMJwq8",
+    durationMinutes: 20,
+    xpReward: 130
+  },
+  {
+    id: "mat_kim_1",
+    title: "Konsep Mol dan Stoikiometri",
+    category: "Kimia",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Materi fundamental kimia tentang konsep mol — bilangan Avogadro, hubungan mol-massa-jumlah partikel-volume gas, dan perhitungan stoikiometri sederhana.",
+    youtubeId: "3zHWfZ16fVo",
+    durationMinutes: 16,
+    xpReward: 120
+  },
+  {
+    id: "mat_kim_2",
+    title: "Hukum Dasar Kimia & Stoikiometri",
+    category: "Kimia",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Pembahasan hukum-hukum dasar kimia (Lavoisier, Proust, Gay-Lussac) dan aplikasinya dalam perhitungan stoikiometri. Disertai tips menyelesaikan soal hitungan kimia.",
+    youtubeId: "3XMbIHKQ6WY",
+    durationMinutes: 20,
+    xpReward: 140
+  },
+  {
+    id: "mat_bio_1",
+    title: "Struktur dan Fungsi Sel",
+    category: "Biologi",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Mempelajari struktur dan fungsi organel-organel sel hewan dan tumbuhan, perbedaan antara keduanya, serta kaitan struktur sel dengan fungsinya dalam kehidupan.",
+    youtubeId: "_JV38mH82F0",
+    durationMinutes: 14,
+    xpReward: 100
+  },
+  {
+    id: "mat_mtk_lanjut_1",
+    title: "Fungsi Trigonometri dan Pemodelannya",
+    category: "Matematika Tingkat Lanjut",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Mempelajari fungsi trigonometri dari konsep dasar hingga pemodelan fenomena periodik. Dibahas grafik fungsi sinus, kosinus, dan tangen serta aplikasinya.",
+    youtubeId: "_ycgBH7nIQE",
+    durationMinutes: 18,
+    xpReward: 130
+  },
+  {
+    id: "mat_mtk_lanjut_2",
+    title: "Fungsi Polinomial",
+    category: "Matematika Tingkat Lanjut",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Pembahasan fungsi polinomial: operasi aljabar, pembagian polinomial, teorema sisa, teorema faktor, dan aplikasi dalam pemodelan matematika.",
+    youtubeId: "02MK6br3940",
+    durationMinutes: 16,
+    xpReward: 120
+  },
+
+  // ============ IPS ============
+  {
+    id: "mat_eko_1",
+    title: "Permintaan dan Penawaran",
+    category: "Ekonomi",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Memahami konsep dasar permintaan (demand) dan penawaran (supply), faktor-faktor yang mempengaruhinya, serta pembentukan harga keseimbangan di pasar.",
+    youtubeId: "_TsyUrSkRqU",
+    durationMinutes: 15,
+    xpReward: 110
+  },
+  {
+    id: "mat_eko_2",
+    title: "Kelangkaan dan Kebutuhan Manusia",
+    category: "Ekonomi",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Membahas konsep kelangkaan sebagai inti dari ilmu ekonomi, jenis-jenis kebutuhan manusia, dan sistem ekonomi sebagai solusi dari masalah kelangkaan.",
+    youtubeId: "_jmDxQc48jw",
+    durationMinutes: 12,
+    xpReward: 90
+  },
+  {
+    id: "mat_sos_1",
+    title: "Tindakan dan Interaksi Sosial",
+    category: "Sosiologi",
+    level: LearnLevel.BASIC,
+    type: "video",
+    content: "Materi tentang tindakan sosial, interaksi sosial, dan proses sosial. Dibahas syarat-syarat terjadinya interaksi sosial serta bentuk-bentuk interksi di masyarakat.",
+    youtubeId: "5TdQMBgy1e4",
+    durationMinutes: 16,
+    xpReward: 110
+  },
+  {
+    id: "mat_sos_2",
+    title: "Pengertian dan Jenis Interaksi Sosial",
+    category: "Sosiologi",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Belajar tentang pengertian interaksi sosial, syarat-syaratnya (kontak dan komunikasi), serta jenis-jenis interaksi sosial baik asosiatif maupun disosiatif.",
+    youtubeId: "6jWVxEgh1b8",
+    durationMinutes: 13,
+    xpReward: 100
+  },
+  {
+    id: "mat_geo_1",
+    title: "Prinsip-Prinsip Ilmu Geografi",
+    category: "Geografi",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Mengenal prinsip-prinsip dasar ilmu geografi — prinsip persebaran, interelasi, deskripsi, dan korologi. Serta ruang lingkup dan objek studi geografi.",
+    youtubeId: "5Agxr3tljLI",
+    durationMinutes: 14,
+    xpReward: 100
+  },
+  {
+    id: "mat_antro_1",
+    title: "Pengertian dan Ruang Lingkup Antropologi",
+    category: "Antropologi",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Mengenal antropologi sebagai ilmu tentang manusia dan kebudayaan. Dibahas ruang lingkup, cabang-cabang antropologi, serta metode penelitian antropologi.",
+    youtubeId: "aTDA7Io1oEg",
+    durationMinutes: 14,
+    xpReward: 100
+  },
+
+  // ============ BAHASA & BUDAYA ============
+  {
+    id: "mat_bi_lanjut_1",
+    title: "Karya Tulis Ilmiah",
+    category: "Bahasa Indonesia Tingkat Lanjut",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Panduan menyusun karya tulis ilmiah: sistematika penulisan, teknik pengumpulan data, kutipan dan daftar pustaka, serta kaidah bahasa Indonesia ilmiah yang baku.",
+    youtubeId: "1YnfRM7_8uo",
+    durationMinutes: 15,
+    xpReward: 110
+  },
+  {
+    id: "mat_bing_lanjut_1",
+    title: "Analytical Exposition Text",
+    category: "Bahasa Inggris Tingkat Lanjut",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Mempelajari Analytical Exposition Text — teks yang menyajikan argumen untuk meyakinkan pembaca. Dibahas struktur, ciri kebahasaan, dan cara menulis teks eksposisi analitis.",
+    youtubeId: "_k75vxX4cRk",
+    durationMinutes: 14,
+    xpReward: 100
+  },
+  {
+    id: "mat_basa_1",
+    title: "Perkenalan Diri Bahasa Mandarin",
+    category: "Bahasa Asing",
+    level: LearnLevel.FUNDAMENTAL,
+    type: "video",
+    content: "Belajar perkenalan dasar dalam bahasa Mandarin — menyebutkan nama, asal, umur, dan hobi. Dilengkapi dengan pelafalan dan karakter Hanzi sederhana.",
+    youtubeId: "_S00iW5DrAE",
+    durationMinutes: 10,
+    xpReward: 80
+  },
+
+  // ============ VOKASI ============
+  {
+    id: "mat_prakarya_1",
+    title: "Sistem Produksi Usaha Kerajinan",
+    category: "Prakarya & Kewirausahaan",
+    level: LearnLevel.INTERMEDIATE,
+    type: "video",
+    content: "Materi tentang sistem produksi dalam usaha kerajinan — mulai dari perencanaan, pengadaan bahan baku, proses produksi, hingga distribusi. Juga dibahas aspek wirausaha dan pemasaran.",
+    youtubeId: "_jDQQJtXWVg",
+    durationMinutes: 18,
+    xpReward: 110
+  },
+
+  // ============ SELEKSI MASUK PT ============
+  {
+    id: "mat_utbk_pu_1",
+    title: "Penalaran Umum — Pernyataan Pasti Salah",
+    category: "UTBK / SNBT",
+    subCategory: "Penalaran Umum",
+    level: LearnLevel.UTBK,
+    type: "video",
+    content: "Strategi mengerjakan soal Penalaran Umum UTBK — terutama tipe soal pernyataan pasti salah. Dibahas pola soal, cara identifikasi, dan trik cepat menjawab.",
+    youtubeId: "3q1q2UVTkUk",
+    durationMinutes: 14,
     xpReward: 150
   },
   {
-    id: "mat_3",
-    title: "Gaya Sentripetal & Melingkar",
-    category: "Fisika",
-    level: LearnLevel.INTERMEDIATE,
-    type: "text",
-    content: `Gerak Melingkar Beraturan (GMB) adalah gerak suatu benda pada lintasan melingkar dengan kelajuan linear konstan, namun arah kecepatannya selalu berubah sepanjang waktu.`,
-    youtubeId: "30t041-h0QY",
+    id: "mat_utbk_pk_1",
+    title: "Pengetahuan Kuantitatif — Akar Berulang",
+    category: "UTBK / SNBT",
+    subCategory: "Pengetahuan Kuantitatif",
+    level: LearnLevel.UTBK,
+    type: "video",
+    content: "Rumus cepat menyelesaikan soal akar berulang yang sering muncul di subtes Pengetahuan Kuantitatif UTBK. Dilengkapi latihan soal dan pembahasan.",
+    youtubeId: "1g_bLjuvp2Y",
     durationMinutes: 12,
-    xpReward: 120
-  }
+    xpReward: 150
+  },
+  {
+    id: "mat_utbk_pm_1",
+    title: "Penalaran Matematika — Soal & Pembahasan",
+    category: "UTBK / SNBT",
+    subCategory: "Penalaran Matematika",
+    level: LearnLevel.UTBK,
+    type: "video",
+    content: "Pembahasan soal Penalaran Matematika UTBK. Tips dan trik mengerjakan soal berbasis konteks dengan cepat dan tepat tanpa kalkulator.",
+    youtubeId: "1Pwt89OI50g",
+    durationMinutes: 16,
+    xpReward: 150
+  },
 ];
 
 function mapBackendMaterial(material: BackendMaterial, subjects: BackendSubject[]): Material {
@@ -61,7 +408,7 @@ function mapBackendMaterial(material: BackendMaterial, subjects: BackendSubject[
     id: String(material.id),
     subjectId: material.subject_id,
     title: material.title,
-    category: (subject?.name || "General") as Material["category"],
+    category: subject?.name || "General",
     subCategory: material.sub_category || undefined,
     level: material.level as LearnLevel,
     type: material.type,
@@ -78,7 +425,6 @@ export default function Learn({ onCompleteMaterial, isDarkMode, userLevel }: Lea
   const [subjects, setSubjects] = useState<BackendSubject[]>([]);
   const [selectedMapel, setSelectedMapel] = useState<string>("Matematika");
   const [selectedSubtest, setSelectedSubtest] = useState<string>("Penalaran Umum");
-  const [selectedLevel, setSelectedLevel] = useState<LearnLevel>(LearnLevel.BASIC);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
   const [isLoadingMaterials, setIsLoadingMaterials] = useState(true);
   const [materialError, setMaterialError] = useState<string | null>(null);
@@ -119,14 +465,13 @@ export default function Learn({ onCompleteMaterial, isDarkMode, userLevel }: Lea
     };
   }, []);
 
-  const displayedMapelList = subjects.length > 0 ? subjects.map(subject => subject.name) : mapelList;
 
   // Filter for list view
   const filteredMaterials = materials.filter(m => {
      if (selectedMapel === "UTBK / SNBT") {
-        return m.category === selectedMapel && m.subCategory === selectedSubtest && m.level === selectedLevel;
+        return m.category === selectedMapel && m.subCategory === selectedSubtest;
      }
-     return m.category === selectedMapel && m.level === selectedLevel;
+     return m.category === selectedMapel;
   });
 
   const handleOpenDetail = (mat: Material) => {
@@ -163,30 +508,39 @@ export default function Learn({ onCompleteMaterial, isDarkMode, userLevel }: Lea
     <div className="w-full" id="learn-root">
       <AnimatePresence mode="wait">
         
-        {/* VIEW 1: SELECT MAPEL & DIFFICULTY & LIST */}
+        {/* VIEW 1: SELECT MAPEL & LIST */}
         {viewMode === "list" && (
           <motion.div key="list" initial={{opacity:0, x:-20}} animate={{opacity:1, x:0}} exit={{opacity:0, x:20}} className="space-y-8">
             
-            {/* Mapel & Level Selection */}
+            {/* Mapel Selection — native dropdown */}
             <div className={`p-6 sm:p-8 rounded-3xl ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white shadow-sm border-gray-200'} border`}>
-              
-              <div className="mb-6 text-center">
-                 <h2 className="text-xl font-black mb-3">Pilih Mata Pelajaran</h2>
-                 <div className="flex flex-wrap justify-center gap-2">
-                   {displayedMapelList.map(mapel => (
-                     <button
-                       key={mapel}
-                       onClick={() => setSelectedMapel(mapel)}
-                       className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
-                         selectedMapel === mapel 
-                           ? 'bg-blue-600 text-white border-blue-600 shadow-md scale-105'
-                           : 'bg-transparent text-gray-500 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800'
-                       }`}
-                     >
-                       {mapel}
-                     </button>
+
+              <div className="mb-4">
+                 <h2 className="text-xl font-black mb-4 text-center">Pilih Mata Pelajaran</h2>
+
+                 <select
+                   value={selectedMapel}
+                   onChange={(e) => setSelectedMapel(e.target.value)}
+                   className={`w-full px-4 py-3 rounded-xl text-sm font-bold border appearance-none cursor-pointer transition-all ${
+                     isDarkMode
+                       ? 'bg-zinc-800 text-white border-zinc-700 focus:border-blue-500'
+                       : 'bg-gray-50 text-gray-900 border-gray-200 focus:border-blue-500'
+                   }`}
+                   style={{
+                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                     backgroundRepeat: 'no-repeat',
+                     backgroundPosition: 'right 16px center',
+                     backgroundSize: '12px',
+                   }}
+                 >
+                   {mapelGroups.map(group => (
+                     <optgroup key={group.group} label={group.group}>
+                       {group.items.map(mapel => (
+                         <option key={mapel} value={mapel}>{mapel}</option>
+                       ))}
+                     </optgroup>
                    ))}
-                 </div>
+                 </select>
               </div>
 
               {selectedMapel === "UTBK / SNBT" && (
@@ -210,24 +564,6 @@ export default function Learn({ onCompleteMaterial, isDarkMode, userLevel }: Lea
                  </div>
               )}
 
-              <div className="text-center pt-6 border-t border-gray-100 dark:border-zinc-800">
-                <h3 className="text-sm font-bold text-gray-400 mb-3 uppercase tracking-wider">Tingkat Kesulitan</h3>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {Object.values(LearnLevel).map(lvl => (
-                    <button
-                      key={lvl}
-                      onClick={() => setSelectedLevel(lvl)}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
-                        selectedLevel === lvl 
-                          ? 'bg-emerald-500 text-white border-emerald-500 shadow-md scale-105'
-                          : 'bg-transparent text-gray-500 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800'
-                      }`}
-                    >
-                      {lvl}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
 
             {materialError && (
@@ -315,7 +651,7 @@ export default function Learn({ onCompleteMaterial, isDarkMode, userLevel }: Lea
                        <FileText className="w-5 h-5 text-blue-500" /> Playlist Belajar
                     </h3>
                     <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                       {materials.filter(m => m.category === selectedMaterial.category && m.level === selectedMaterial.level).map((m, idx) => (
+                       {materials.filter(m => m.category === selectedMaterial.category).map((m, idx) => (
                           <div 
                             key={m.id} 
                             onClick={() => setSelectedMaterial(m)}
